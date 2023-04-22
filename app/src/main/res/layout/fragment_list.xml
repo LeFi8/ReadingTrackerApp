@@ -9,9 +9,22 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/list_item" />
+
+    <ImageButton
+        android:id="@+id/addBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/teal_200"
+        android:src="@drawable/ic_add_icon"
+        android:background="@drawable/roundedcorners"
+        app:circularflow_radiusInDP="100"
+        app:layout_constraintBottom_toBottomOf="@+id/list"
+        app:layout_constraintEnd_toEndOf="@+id/list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

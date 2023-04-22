@@ -13,6 +13,8 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
         binding.readingStatus.text = binding.root.context.getString(R.string.status, book.status)
         binding.currentReadingPage.text = binding.root.context.getString(R.string.page, book.currentPage)
         binding.image.setImageResource(book.resId)
+        val progress: Double = book.currentPage.toDouble() / book.maxPages.toDouble() * 100
+        binding.progressBar.progress = progress.toInt()
     }
 }
 

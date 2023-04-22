@@ -1,7 +1,6 @@
 package com.example.readingtrackerapp
 
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,7 @@ import com.example.readingtrackerapp.databinding.FragmentListBinding
 class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
-    private lateinit var adapter: BooksAdapter
+    private var adapter: BooksAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,5 +33,14 @@ class ListFragment : Fragment() {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(requireContext())
         }
+
+        binding.addBtn.setOnClickListener {
+            (activity as? Navigable)?.navigate(Navigable.Destination.Add)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter?.replace(DataSource.books)
     }
 }

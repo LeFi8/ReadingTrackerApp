@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Reading Tracker</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="status">Status: %s</string>
     <string name="status2">Status</string>
     <string name="page">Page: %d</string>
-    <string name="page2">Page</string>
+    <string name="current_page">Current page</string>
+    <string name="max_num_of_pages">Number of all pages</string>
+    <string name="save">Save</string>
+    <string name="saved">Item saved!</string>
 </resources>

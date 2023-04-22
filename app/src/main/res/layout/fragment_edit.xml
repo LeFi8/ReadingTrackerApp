@@ -7,7 +7,20 @@
     tools:context=".EditFragment">
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/maxPages"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="center|start"
+        android:hint="@string/max_num_of_pages"
+        android:inputType="number|textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/currentPage"
+        app:layout_constraintStart_toStartOf="@+id/currentPage"
+        app:layout_constraintTop_toBottomOf="@+id/currentPage" />
+
+    <EditText
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -22,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -30,20 +43,43 @@
         android:gravity="start"
         android:hint="@string/status2"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
-        android:layout_width="60dp"
+        android:id="@+id/currentPage"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:gravity="center|start"
-        android:hint="@string/page2"
+        android:hint="@string/current_page"
         android:inputType="number|textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintEnd_toEndOf="@+id/status"
+        app:layout_constraintStart_toStartOf="@+id/status"
+        app:layout_constraintTop_toBottomOf="@+id/status" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/images"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/maxPages"
+        tools:listitem="@layout/book_image" />
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="64dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/images" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
