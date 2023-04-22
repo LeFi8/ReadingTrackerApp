@@ -10,8 +10,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val listFragment = ListFragment()
+        val editFragment = EditFragment()
         supportFragmentManager.beginTransaction()
-            .add(com.google.android.material.R.id.container, listFragment, listFragment.javaClass.name)
+//            .add(R.id.container, editFragment, listFragment.javaClass.name)
+            .add(R.id.container, listFragment, listFragment.javaClass.name)
             .commit()
     }
 }

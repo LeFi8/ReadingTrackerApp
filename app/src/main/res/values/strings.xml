@@ -2,5 +2,9 @@
     <string name="app_name">Reading Tracker</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title</string>
     <string name="status">Status: %s</string>
+    <string name="status2">Status</string>
+    <string name="page">Page: %d</string>
+    <string name="page2">Page</string>
 </resources>

@@ -11,7 +11,7 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
     fun bind(book: Book) {
         binding.bookTitle.text = book.title
         binding.readingStatus.text = binding.root.context.getString(R.string.status, book.status)
-        binding.currentReadingPage.text = book.currentPage.toString()
+        binding.currentReadingPage.text = binding.root.context.getString(R.string.page, book.currentPage)
         binding.image.setImageResource(book.resId)
     }
 }
