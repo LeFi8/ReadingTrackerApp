@@ -2,7 +2,8 @@ package com.example.readingtrackerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import com.example.readingtrackerapp.fragments.EditFragment
+import com.example.readingtrackerapp.fragments.ListFragment
 
 class MainActivity : AppCompatActivity(), Navigable{
 

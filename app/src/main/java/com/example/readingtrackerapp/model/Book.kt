@@ -1,4 +1,4 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.model
 
 import androidx.annotation.DrawableRes
 

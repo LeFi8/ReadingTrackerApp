@@ -1,4 +1,7 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.data
+
+import com.example.readingtrackerapp.model.Book
+import com.example.readingtrackerapp.R
 
 object DataSource {
 

@@ -1,4 +1,4 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.readingtrackerapp.*
+import com.example.readingtrackerapp.adapters.BookImagesAdapter
+import com.example.readingtrackerapp.data.DataSource
 import com.example.readingtrackerapp.databinding.FragmentEditBinding
+import com.example.readingtrackerapp.model.Book
 
 
 class EditFragment : Fragment() {

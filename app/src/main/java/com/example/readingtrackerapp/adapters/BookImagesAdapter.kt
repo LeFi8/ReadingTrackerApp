@@ -1,9 +1,10 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.BookImageBinding
 
 class BookImageViewHolder(private val binding: BookImageBinding) : RecyclerView.ViewHolder(binding.root) {

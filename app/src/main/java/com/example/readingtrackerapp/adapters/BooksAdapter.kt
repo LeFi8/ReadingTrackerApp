@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.readingtrackerapp.databinding.ListItemBinding
+import com.example.readingtrackerapp.model.Book
 
 class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

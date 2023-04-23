@@ -1,4 +1,4 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.readingtrackerapp.BooksAdapter
+import com.example.readingtrackerapp.data.DataSource
+import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
