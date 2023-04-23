@@ -1,12 +1,15 @@
 package com.example.readingtrackerapp.adapters
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.HandlerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.readingtrackerapp.R
+import com.example.readingtrackerapp.data.BookDB
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
 
@@ -33,6 +36,21 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
             parent,
             false
         )
+
+        binding.root.setOnLongClickListener{
+            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(parent.context)
+            alertDialog.setTitle(parent.resources.getString(R.string.removing_are_you_sure, binding.bookTitle.text))
+            alertDialog.setPositiveButton(parent.resources.getString(R.string.yes)){ _, _ ->
+//                BookDB.open(parent.context).books.removeBook()
+
+                Toast.makeText(parent.context,parent.resources.getString(R.string.removed),Toast.LENGTH_SHORT).show()
+            }
+            alertDialog.setNegativeButton(parent.resources.getString(R.string.no)){ _, _ -> {} }
+            alertDialog.show()
+
+            true
+        }
+
         return BookViewHolder(binding)
     }
 

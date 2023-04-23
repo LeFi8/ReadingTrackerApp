@@ -1,9 +1,6 @@
 package com.example.readingtrackerapp.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.readingtrackerapp.data.model.BookEntity
 
 @Dao
@@ -16,4 +13,7 @@ interface BookDao {
 
     @Update
     fun updateBook(book: BookEntity)
+
+    @Delete
+    fun removeBook(book: BookEntity)
 }

@@ -8,7 +8,6 @@ import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.BookImageBinding
 
 class BookImageViewHolder(private val binding: BookImageBinding) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(resId: Int, isSelected: Boolean) {
         binding.image.setImageResource(resId)
         binding.selected.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
