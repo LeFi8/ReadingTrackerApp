@@ -44,16 +44,7 @@ class ListFragment : Fragment() {
     }
 
     private fun loadData () = thread {
-        val books = BookDB.open(requireContext()).books.getAll().map {
-            Book(
-                it.title,
-                it.status,
-                it.currentPage,
-                it.maxPage,
-                resources.getIdentifier(it.icon, "drawable", requireContext().packageName)
-            )
-        }
-        adapter?.replace(books)
+        adapter?.replace(requireContext())
     }
 
     override fun onStart() {

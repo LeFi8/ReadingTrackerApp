@@ -8,6 +8,9 @@ interface BookDao {
     @Query("SELECT * FROM book;")
     fun getAll(): List<BookEntity>
 
+    @Query("SELECT * from book WHERE title = :title;")
+    fun getBook(title: String): BookEntity
+
     @Insert
     fun addBook(newBook: BookEntity)
 
