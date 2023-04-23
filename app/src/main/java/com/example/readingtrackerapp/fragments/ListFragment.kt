@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.readingtrackerapp.adapters.BooksAdapter
-import com.example.readingtrackerapp.data.DataSource
 import com.example.readingtrackerapp.Navigable
+import com.example.readingtrackerapp.data.BookDB
 import com.example.readingtrackerapp.databinding.FragmentListBinding
+import com.example.readingtrackerapp.model.Book
+import kotlin.concurrent.thread
 
 class ListFragment : Fragment() {
 
@@ -20,7 +23,6 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return FragmentListBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -28,10 +30,9 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = BooksAdapter()
+        loadData()
 
-        adapter = BooksAdapter().apply {
-            replace(DataSource.books)
-        }
         binding.list.let {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(requireContext())
@@ -42,8 +43,22 @@ class ListFragment : Fragment() {
         }
     }
 
+    private fun loadData () = thread {
+        val books = BookDB.open(requireContext()).books.getAll().map {
+            Book(
+                it.title,
+                it.status,
+                it.currentPage,
+                it.maxPage,
+                resources.getIdentifier(it.icon, "drawable", requireContext().packageName)
+            )
+        }
+        adapter?.replace(books)
+    }
+
     override fun onStart() {
         super.onStart()
-        adapter?.replace(DataSource.books)
+        loadData()
     }
+
 }

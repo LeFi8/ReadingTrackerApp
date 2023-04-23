@@ -1,8 +1,10 @@
 package com.example.readingtrackerapp.adapters
 
 import android.annotation.SuppressLint
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.HandlerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.ListItemBinding
@@ -23,6 +25,7 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
 class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
 
     private val data = mutableListOf<Book>()
+    private val handler: android.os.Handler = HandlerCompat.createAsync(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = ListItemBinding.inflate(
@@ -43,6 +46,9 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
     fun replace(newData: List<Book>){
         data.clear()
         data.addAll(newData)
-        notifyDataSetChanged()
+
+        handler.post {
+            notifyDataSetChanged()
+        }
     }
 }
