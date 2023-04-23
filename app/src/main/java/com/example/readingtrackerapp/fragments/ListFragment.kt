@@ -5,13 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.readingtrackerapp.adapters.BooksAdapter
 import com.example.readingtrackerapp.Navigable
-import com.example.readingtrackerapp.data.BookDB
 import com.example.readingtrackerapp.databinding.FragmentListBinding
-import com.example.readingtrackerapp.model.Book
 import kotlin.concurrent.thread
 
 class ListFragment : Fragment() {
@@ -44,7 +41,7 @@ class ListFragment : Fragment() {
     }
 
     private fun loadData () = thread {
-        adapter?.replace(requireContext())
+        adapter?.refresh(requireContext())
     }
 
     override fun onStart() {

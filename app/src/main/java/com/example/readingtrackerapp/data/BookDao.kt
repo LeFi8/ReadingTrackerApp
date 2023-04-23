@@ -18,5 +18,7 @@ interface BookDao {
     fun updateBook(book: BookEntity)
 
     @Delete
-    fun removeBook(book: BookEntity)
+    fun removeBook(book: BookEntity) : Int
+
+
 }
