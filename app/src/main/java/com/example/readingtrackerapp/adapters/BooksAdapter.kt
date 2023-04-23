@@ -1,9 +1,10 @@
-package com.example.readingtrackerapp
+package com.example.readingtrackerapp.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
 

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.readingtrackerapp.BooksAdapter
+import com.example.readingtrackerapp.adapters.BooksAdapter
 import com.example.readingtrackerapp.data.DataSource
 import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.databinding.FragmentListBinding
