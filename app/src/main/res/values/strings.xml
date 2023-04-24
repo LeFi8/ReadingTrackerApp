@@ -13,4 +13,6 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="removed">Item removed</string>
+    <string name="add">add</string>
+    <string name="overall_progress">Overall Reading Progress</string>
 </resources>

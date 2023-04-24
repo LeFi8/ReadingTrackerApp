@@ -101,5 +101,15 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun sort() {
+        data.sortBy {
+            it.currentPage / it.maxPages * 100
+        }
+        handler.post {
+            notifyDataSetChanged()
+        }
+    }
+
 
 }
