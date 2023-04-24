@@ -6,13 +6,11 @@ import android.content.Context
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.os.HandlerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.data.BookDB
-import com.example.readingtrackerapp.data.model.BookEntity
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
 import kotlin.concurrent.thread
@@ -20,6 +18,7 @@ import kotlin.concurrent.thread
 class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(book: Book) {
+        binding.id.text = book.id.toString()
         binding.bookTitle.text = book.title
         binding.readingStatus.text = binding.root.context.getString(R.string.status, book.status)
         binding.readingProgress.text = binding.root.context.getString(R.string.page, book.currentPage, book.maxPages)
@@ -28,6 +27,8 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
         val progress: Double = book.currentPage.toDouble() / book.maxPages.toDouble() * 100
         binding.progressBar.progress = progress.toInt()
     }
+
+    fun getBinding() = binding
 }
 
 class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
@@ -42,44 +43,6 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
             false
         )
 
-        // TODO: fix removing, would be better if it checks id
-        binding.root.setOnLongClickListener {
-            val selectedBook = BookEntity(
-                title = binding.bookTitle.text.toString(),
-                status = binding.readingStatus.text.toString(),
-                currentPage = binding.readingProgress.text.toString()
-                    .replace(binding.root.resources.getString(R.string.page_match_to_replace), "")
-                    .split("/")[0]
-                    .trim()
-                    .toInt(),
-                maxPage = binding.readingProgress.text.toString().split("/")[1].toInt(),
-                icon = parent.context.resources.getResourceName(binding.image.tag.toString().toInt())
-            )
-
-            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(parent.context)
-            alertDialog.setTitle(
-                parent.resources.getString(
-                    R.string.removing_are_you_sure,
-                    selectedBook.title
-                )
-            )
-            alertDialog.setPositiveButton(parent.resources.getString(R.string.yes)) { _, _ ->
-                thread {
-                    BookDB.open(parent.context).books.removeBook(selectedBook)
-                    refresh(parent.context)
-                }
-                Toast.makeText(
-                    parent.context,
-                    parent.resources.getString(R.string.removed),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            alertDialog.setNegativeButton(parent.resources.getString(R.string.no)) { _, _ -> {} }
-            alertDialog.show()
-
-            true
-        }
-
         return BookViewHolder(binding)
     }
 
@@ -87,12 +50,42 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.bind(data[position])
+        val binding = holder.getBinding()
+
+        binding.root.setOnLongClickListener {
+            val context = binding.root.context
+            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+            alertDialog.setTitle(
+                binding.root.resources.getString(
+                    R.string.removing_are_you_sure,
+                    data[position].title
+                )
+            )
+            alertDialog.setPositiveButton(binding.root.resources.getString(R.string.yes)) { _, _ ->
+                thread {
+                    val selectedBook = BookDB.open(context).books.getBook(data[position].id)
+                    BookDB.open(context).books.removeBook(selectedBook)
+                    refresh(context)
+                }
+                Toast.makeText(
+                    context,
+                    binding.root.resources.getString(R.string.removed),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            alertDialog.setNegativeButton(binding.root.resources.getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+            alertDialog.show()
+
+            true
+        }
+
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "DiscouragedApi")
     fun refresh(context: Context){
         val books = BookDB.open(context).books.getAll().map {
             Book(
+                it.id,
                 it.title,
                 it.status,
                 it.currentPage,

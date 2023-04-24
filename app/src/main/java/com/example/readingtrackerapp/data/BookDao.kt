@@ -8,8 +8,8 @@ interface BookDao {
     @Query("SELECT * FROM book;")
     fun getAll(): List<BookEntity>
 
-    @Query("SELECT * from book WHERE title = :title;")
-    fun getBook(title: String): BookEntity
+    @Query("SELECT * from book WHERE id = :id;")
+    fun getBook(id: Long): BookEntity
 
     @Insert
     fun addBook(newBook: BookEntity)
@@ -18,7 +18,7 @@ interface BookDao {
     fun updateBook(book: BookEntity)
 
     @Delete
-    fun removeBook(book: BookEntity) : Int
+    fun removeBook(bookId: BookEntity)
 
 
 }
