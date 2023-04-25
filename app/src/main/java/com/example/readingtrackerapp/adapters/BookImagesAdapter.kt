@@ -1,6 +1,5 @@
 package com.example.readingtrackerapp.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ class BookImageViewHolder(private val binding: BookImageBinding) : RecyclerView.
     }
 }
 
-class BookImagesAdapter(private val editView: Boolean, private val iconId: Int = 0) : RecyclerView.Adapter<BookImageViewHolder>() {
+class BookImagesAdapter(private val editView: Boolean, iconId: Int = 0) : RecyclerView.Adapter<BookImageViewHolder>() {
 
     private val images = listOf(R.drawable.book, R.drawable.manga)
     private var selectedPos: Int = iconId

@@ -14,8 +14,11 @@
     <string name="no">no</string>
     <string name="removed">Item removed</string>
     <string name="add">add</string>
+    <string name="progress">Progress</string>
     <string name="overall_progress">Overall Reading Progress</string>
     <string name="overall_progress_text">%d/%d</string>
+    <string name="book_manga_image">book or manga image</string>
+    <string name="sort">sort</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

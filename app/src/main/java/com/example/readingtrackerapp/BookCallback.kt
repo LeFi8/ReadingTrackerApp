@@ -3,7 +3,7 @@ package com.example.readingtrackerapp
 import androidx.recyclerview.widget.DiffUtil
 import com.example.readingtrackerapp.model.Book
 
-class BookCallback(val notSorted: List<Book>, val sorted: List<Book>) : DiffUtil.Callback() {
+class BookCallback(private val notSorted: List<Book>, private val sorted: List<Book>) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = notSorted.size
 
     override fun getNewListSize(): Int = sorted.size

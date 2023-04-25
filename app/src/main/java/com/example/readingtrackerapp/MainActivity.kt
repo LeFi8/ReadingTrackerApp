@@ -2,13 +2,10 @@ package com.example.readingtrackerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import com.example.readingtrackerapp.fragments.EditFragment
 import com.example.readingtrackerapp.fragments.ListFragment
 
 class MainActivity : AppCompatActivity(), Navigable {
-
-    private lateinit var listFragment: ListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +14,6 @@ class MainActivity : AppCompatActivity(), Navigable {
 
         val listFragment = ListFragment()
         supportFragmentManager.beginTransaction()
-//            .add(R.id.container, editFragment, listFragment.javaClass.name)
             .add(R.id.container, listFragment, listFragment.javaClass.name)
             .commit()
     }
@@ -33,9 +29,6 @@ class MainActivity : AppCompatActivity(), Navigable {
                 Navigable.Destination.Edit -> {
                     replace(R.id.container, EditFragment(), EditFragment::class.java.name)
                     addToBackStack(EditFragment::class.java.name)
-                }
-                else -> {
-                    return@apply
                 }
             }.commit()
         }

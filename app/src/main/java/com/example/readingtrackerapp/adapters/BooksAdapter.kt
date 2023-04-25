@@ -2,7 +2,6 @@ package com.example.readingtrackerapp.adapters
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.SummaryRefreshListener
 import com.example.readingtrackerapp.data.BookDB
-import com.example.readingtrackerapp.data.model.BookEntity
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
 import kotlin.concurrent.thread
@@ -37,7 +35,7 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
     fun getBinding() = binding
 }
 
-class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
+class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
 
     private val data = mutableListOf<Book>()
     private val handler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
@@ -55,6 +53,7 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
 
     override fun getItemCount(): Int = data.size
 
+    @SuppressLint("DiscouragedApi")
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.bind(data[position])
         val binding = holder.getBinding()

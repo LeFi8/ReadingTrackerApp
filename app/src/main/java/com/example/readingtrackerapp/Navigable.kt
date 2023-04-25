@@ -2,7 +2,7 @@ package com.example.readingtrackerapp
 
 interface Navigable {
     enum class Destination {
-        List, Add, Edit
+        List, Edit
     }
 
     fun navigate(to: Destination)
