@@ -3,13 +3,18 @@ package com.example.readingtrackerapp.adapters
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.HandlerCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.readingtrackerapp.BookCallback
+import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.R
+import com.example.readingtrackerapp.SummaryRefreshListener
 import com.example.readingtrackerapp.data.BookDB
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
@@ -31,10 +36,11 @@ class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHo
     fun getBinding() = binding
 }
 
-class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
+class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
 
     private val data = mutableListOf<Book>()
-    private val handler: android.os.Handler = HandlerCompat.createAsync(Looper.getMainLooper())
+    private val handler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
+    private var listener: SummaryRefreshListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = ListItemBinding.inflate(
@@ -79,6 +85,13 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
             true
         }
 
+        binding.root.setOnClickListener {
+            (binding.root.context as? Navigable)?.navigate(Navigable.Destination.Edit)
+        }
+    }
+
+    fun setSummaryRefreshListener(listener: SummaryRefreshListener){
+        this.listener = listener
     }
 
     @SuppressLint("NotifyDataSetChanged", "DiscouragedApi")
@@ -98,18 +111,23 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
 
         handler.post {
             notifyDataSetChanged()
+            listener?.summaryDataRefresh(context)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun sort() {
+        val notSorted = data.toList()
         data.sortBy {
-            it.currentPage / it.maxPages * 100
+            it.currentPage.toDouble() / it.maxPages.toDouble() * 100
         }
+
+        val callback = BookCallback(notSorted, data)
+        val result = DiffUtil.calculateDiff(callback)
+
         handler.post {
-            notifyDataSetChanged()
+            result.dispatchUpdatesTo(this)
         }
     }
-
 
 }

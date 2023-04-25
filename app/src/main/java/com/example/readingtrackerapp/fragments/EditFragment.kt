@@ -7,15 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.util.splitToIntList
 import com.example.readingtrackerapp.*
 import com.example.readingtrackerapp.adapters.BookImagesAdapter
 import com.example.readingtrackerapp.data.BookDB
 import com.example.readingtrackerapp.data.model.BookEntity
 import com.example.readingtrackerapp.databinding.FragmentEditBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 
-class EditFragment : Fragment() {
+class EditFragment(private val id: Long = -1) : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
     private lateinit var adapter: BookImagesAdapter
@@ -23,7 +28,7 @@ class EditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return FragmentEditBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -32,6 +37,19 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = BookImagesAdapter()
+
+        var book: BookEntity
+        if (id.toInt() != -1) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val data = withContext(Dispatchers.IO) {
+                    BookDB.open(view.context).books.getBook(id)
+                }
+
+            }
+
+        }
+
+
         binding.images.apply {
             adapter = this@EditFragment.adapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
