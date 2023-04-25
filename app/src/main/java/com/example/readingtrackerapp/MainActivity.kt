@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity(), Navigable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
 
         val listFragment = ListFragment()
         supportFragmentManager.beginTransaction()
