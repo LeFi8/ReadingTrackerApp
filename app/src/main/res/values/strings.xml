@@ -8,7 +8,7 @@
     <string name="current_page">Current page</string>
     <string name="max_num_of_pages">Number of all pages</string>
     <string name="save">Save</string>
-    <string name="saved">Item saved!</string>
+    <string name="saved">Saved!</string>
     <string name="removing_are_you_sure">Are you sure you want to remove %s?</string>
     <string name="yes">yes</string>
     <string name="no">no</string>

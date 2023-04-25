@@ -99,7 +99,7 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
         }
 
         binding.root.setOnClickListener {
-            (binding.root.context as? Navigable)?.navigate(Navigable.Destination.Edit)
+            (binding.root.context as? Navigable)?.navigateWithBookId(Navigable.Destination.Edit, data[position].id)
         }
     }
 
