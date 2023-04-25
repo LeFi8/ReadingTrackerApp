@@ -64,7 +64,17 @@ class ListFragment : Fragment(), SummaryRefreshListener{
     }
 
     private fun loadData() = thread {
-        adapter?.refresh(requireContext())
+        val books = BookDB.open(requireContext()).books.getAll().map {
+        Book(
+            it.id,
+            it.title,
+            it.status,
+            it.currentPage,
+            it.maxPage,
+            resources.getIdentifier(it.icon, "drawable", requireContext().packageName)
+        )
+    }
+        adapter?.replace(books)
     }
 
     override fun onStart() {

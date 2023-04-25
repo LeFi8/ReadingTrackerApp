@@ -16,6 +16,7 @@ import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.SummaryRefreshListener
 import com.example.readingtrackerapp.data.BookDB
+import com.example.readingtrackerapp.data.model.BookEntity
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
 import kotlin.concurrent.thread
@@ -71,7 +72,19 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
                 thread {
                     val selectedBook = BookDB.open(context).books.getBook(data[position].id)
                     BookDB.open(context).books.removeBook(selectedBook)
-                    refresh(context)
+
+                    val books = BookDB.open(context).books.getAll().map {
+                        Book(
+                            it.id,
+                            it.title,
+                            it.status,
+                            it.currentPage,
+                            it.maxPage,
+                            context.resources.getIdentifier(it.icon, "drawable", context.packageName)
+                        )
+                    }
+                    replace(books)
+                    listener?.summaryDataRefresh(context)
                 }
                 Toast.makeText(
                     context,
@@ -95,23 +108,15 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged", "DiscouragedApi")
-    fun refresh(context: Context){
-        val books = BookDB.open(context).books.getAll().map {
-            Book(
-                it.id,
-                it.title,
-                it.status,
-                it.currentPage,
-                it.maxPage,
-                context.resources.getIdentifier(it.icon, "drawable", context.packageName)
-            )
-        }
+    fun replace(newData: List<Book>){
+        val callback = BookCallback(data, newData)
         data.clear()
-        data.addAll(books)
+        data.addAll(newData)
+        val result = DiffUtil.calculateDiff(callback)
 
         handler.post {
             notifyDataSetChanged()
-            listener?.summaryDataRefresh(context)
+            result.dispatchUpdatesTo(this)
         }
     }
 
@@ -126,6 +131,7 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
         val result = DiffUtil.calculateDiff(callback)
 
         handler.post {
+            notifyDataSetChanged()
             result.dispatchUpdatesTo(this)
         }
     }
