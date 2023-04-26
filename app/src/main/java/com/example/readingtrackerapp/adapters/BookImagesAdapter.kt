@@ -8,9 +8,13 @@ import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.BookImageBinding
 
 class BookImageViewHolder(private val binding: BookImageBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(resId: Int, isSelected: Boolean) {
+    fun bind(resId: Int, isSelected: Boolean, editView: Boolean, selectedPos: Int) {
         binding.image.setImageResource(resId)
-        binding.selected.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
+
+        if (editView && selectedPos == resId)
+            binding.selected.visibility = View.VISIBLE
+        else
+            binding.selected.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
     }
 }
 
@@ -40,9 +44,6 @@ class BookImagesAdapter(private val editView: Boolean, iconId: Int = 0) : Recycl
     override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: BookImageViewHolder, position: Int) {
-        if (editView)
-            holder.bind(images[position], selectedPos == images[position])
-        else
-            holder.bind(images[position], position == selectedPos)
+        holder.bind(images[position], selectedPos == position, editView, selectedPos)
     }
 }
