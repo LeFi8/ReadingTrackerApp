@@ -56,16 +56,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/overallProgressBar" />
 
-        <ImageButton
+        <Button
             android:id="@+id/sortBtn"
-            android:layout_width="37dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/sort_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:background="@color/transparent"
+            android:contentDescription="@string/sort"
+            android:drawableLeft="@drawable/baseline_sort_24"
+            android:paddingBottom="0dp"
+            android:text="@string/sort"
+            android:textColor="@color/darker_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/sort" />
+            tools:ignore="RtlHardcoded" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
