@@ -82,7 +82,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 return@setOnClickListener
             }
 
-            if (currentPage.text.toString().toInt() > maxPage.toString().toInt()){
+            if (currentPage.text.toString().toInt() > maxPage.text.toString().toInt()){
                 currentPage.error = resources.getString(R.string.page_error)
                 maxPage.error = resources.getString(R.string.page_error)
                 return@setOnClickListener
