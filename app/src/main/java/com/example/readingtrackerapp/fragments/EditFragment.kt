@@ -74,11 +74,16 @@ class EditFragment(private val id: Long = -1) : Fragment() {
 
         binding.saveBtn.setOnClickListener {
             val title = binding.title
-            val currentPage = binding.currentPage.text
+            val currentPage = binding.currentPage
             val maxPage = binding.maxPages.text
 
             if (title.text.isEmpty()) {
-                title.error = view.resources.getString(R.string.empty_title_alert)
+                title.error = resources.getString(R.string.empty_title_alert)
+                return@setOnClickListener
+            }
+
+            if (currentPage.text.toString().toInt() > maxPage.toString().toInt()){
+                currentPage.error = resources.getString(R.string.page_error)
                 return@setOnClickListener
             }
 
@@ -86,7 +91,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 val newBook = BookEntity(
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.isEmpty()) 0 else currentPage.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.toString().toInt(),
                     maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )
@@ -99,7 +104,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     id = id,
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.isEmpty()) 0 else currentPage.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.toString().toInt(),
                     maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )

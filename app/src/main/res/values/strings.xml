@@ -23,14 +23,15 @@
     <string name="status_not_started">Not started</string>
     <string name="status_reading">Reading</string>
     <string name="status_completed">Completed</string>
+    <string name="page_error">The current reading page cannot exceed the maximum number of pages</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
     
     <string-array name="available_status">
         <item>Not started</item>
         <item>Reading</item>
         <item>Completed</item>
         <item>Up to date</item>
+        <item>Dropped</item>
     </string-array>
 </resources>
