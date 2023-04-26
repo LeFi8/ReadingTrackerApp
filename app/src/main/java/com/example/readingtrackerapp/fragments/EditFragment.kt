@@ -75,7 +75,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         binding.saveBtn.setOnClickListener {
             val title = binding.title
             val currentPage = binding.currentPage
-            val maxPage = binding.maxPages.text
+            val maxPage = binding.maxPages
 
             if (title.text.isEmpty()) {
                 title.error = resources.getString(R.string.empty_title_alert)
@@ -84,6 +84,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
 
             if (currentPage.text.toString().toInt() > maxPage.toString().toInt()){
                 currentPage.error = resources.getString(R.string.page_error)
+                maxPage.error = resources.getString(R.string.page_error)
                 return@setOnClickListener
             }
 
@@ -91,8 +92,8 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 val newBook = BookEntity(
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.toString().toInt(),
-                    maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString().toInt(),
+                    maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )
                 thread {
@@ -104,8 +105,8 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     id = id,
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.toString().toInt(),
-                    maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString().toInt(),
+                    maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )
                 thread {
