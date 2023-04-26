@@ -32,23 +32,10 @@
         android:gravity="start"
         android:hint="@string/title"
         android:inputType="textPersonName"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
-
-    <EditText
-        android:id="@+id/status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:gravity="start"
-        android:hint="@string/status2"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
         android:importantForAutofill="no" />
 
     <EditText
@@ -59,11 +46,11 @@
         android:ems="10"
         android:gravity="center|start"
         android:hint="@string/current_page"
+        android:importantForAutofill="no"
         android:inputType="number|textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/status"
         app:layout_constraintStart_toStartOf="@+id/status"
-        app:layout_constraintTop_toBottomOf="@+id/status"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/status" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/images"
@@ -87,5 +74,16 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/images" />
+
+    <Spinner
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+        android:id="@+id/status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

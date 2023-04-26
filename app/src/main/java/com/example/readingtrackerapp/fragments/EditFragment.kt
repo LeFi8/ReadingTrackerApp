@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.readingtrackerapp.*
@@ -39,13 +40,20 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = BookImagesAdapter(false)
 
+        val spinner = binding.status
+        val spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            resources.getStringArray(R.array.available_status))
+        spinner.adapter = spinnerAdapter
+
         if (id.toInt() != -1) {
             CoroutineScope(Dispatchers.Main).launch {
                 val data = withContext(Dispatchers.IO) {
                     BookDB.open(view.context).books.getBook(id)
                 }
                 binding.title.setText(data.title)
-                binding.status.setText(data.status)
+                binding.status.setSelection(spinnerAdapter.getPosition(data.status))
                 binding.currentPage.setText(data.currentPage.toString())
                 binding.maxPages.setText(data.maxPage.toString())
 
@@ -65,25 +73,34 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         }
 
         binding.saveBtn.setOnClickListener {
-            if (id.toInt() == -1) {
+            val title = binding.title
+            val currentPage = binding.currentPage.text
+            val maxPage = binding.maxPages.text
+
+            if (title.text.isEmpty()) {
+                title.error = view.resources.getString(R.string.empty_title_alert)
+                return@setOnClickListener
+            }
+
+            if (id.toInt() == -1) { // adding
                 val newBook = BookEntity(
-                    title = binding.title.text.toString(),
-                    status = binding.status.text.toString(),
-                    currentPage = binding.currentPage.text.toString().toInt(),
-                    maxPage = binding.maxPages.text.toString().toInt(),
+                    title = title.text.toString(),
+                    status = binding.status.selectedItem.toString(),
+                    currentPage = if (currentPage.isEmpty()) 0 else currentPage.toString().toInt(),
+                    maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )
                 thread {
                     BookDB.open(requireContext()).books.addBook(newBook)
                     (activity as? Navigable)?.navigate(Navigable.Destination.List)
                 }
-            } else {
+            } else { // editing
                 val book = BookEntity(
                     id = id,
-                    title = binding.title.text.toString(),
-                    status = binding.status.text.toString(),
-                    currentPage = binding.currentPage.text.toString().toInt(),
-                    maxPage = binding.maxPages.text.toString().toInt(),
+                    title = title.text.toString(),
+                    status = binding.status.selectedItem.toString(),
+                    currentPage = if (currentPage.isEmpty()) 0 else currentPage.toString().toInt(),
+                    maxPage = if (maxPage.isEmpty()) 0 else maxPage.toString().toInt(),
                     icon = resources.getResourceName(adapter.selectedResId)
                 )
                 thread {

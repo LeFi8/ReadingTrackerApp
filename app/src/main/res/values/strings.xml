@@ -19,6 +19,18 @@
     <string name="overall_progress_text">%d/%d</string>
     <string name="book_manga_image">book or manga image</string>
     <string name="sort">sort</string>
+    <string name="empty_title_alert">Title cannot be empty</string>
+    <string name="status_not_started">Not started</string>
+    <string name="status_reading">Reading</string>
+    <string name="status_completed">Completed</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    
+    <string-array name="available_status">
+        <item>Not started</item>
+        <item>Reading</item>
+        <item>Completed</item>
+        <item>Up to date</item>
+    </string-array>
 </resources>
