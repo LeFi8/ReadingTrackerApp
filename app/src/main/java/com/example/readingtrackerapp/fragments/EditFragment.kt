@@ -43,7 +43,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         val spinner = binding.status
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_spinner_dropdown_item,
             resources.getStringArray(R.array.available_status))
         spinner.adapter = spinnerAdapter
 

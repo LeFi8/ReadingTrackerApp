@@ -33,5 +33,6 @@
         <item>Completed</item>
         <item>Up to date</item>
         <item>Dropped</item>
+        <item>Other</item>
     </string-array>
 </resources>
