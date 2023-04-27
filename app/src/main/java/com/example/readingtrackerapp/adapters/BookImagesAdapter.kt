@@ -8,25 +8,20 @@ import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.databinding.BookImageBinding
 
 class BookImageViewHolder(private val binding: BookImageBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(resId: Int, isSelected: Boolean, editView: Boolean, selectedPos: Int) {
+    fun bind(resId: Int, isSelected: Boolean) {
         binding.image.setImageResource(resId)
-
-        if (editView && selectedPos == resId)
-            binding.selected.visibility = View.VISIBLE
-        else
-            binding.selected.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
+        binding.selected.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
     }
 }
 
-class BookImagesAdapter(private val editView: Boolean, iconId: Int = 0) : RecyclerView.Adapter<BookImageViewHolder>() {
+class BookImagesAdapter(editView: Boolean, iconId: Int = 0) : RecyclerView.Adapter<BookImageViewHolder>() {
 
     private val images = listOf(R.drawable.book, R.drawable.manga)
-    private var selectedPos: Int = iconId
+    private var selectedPos: Int = if (editView) images.indexOf(iconId) else iconId
     val selectedResId: Int
         get() = images[selectedPos]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookImageViewHolder {
-
         val binding = BookImageBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -44,6 +39,6 @@ class BookImagesAdapter(private val editView: Boolean, iconId: Int = 0) : Recycl
     override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: BookImageViewHolder, position: Int) {
-        holder.bind(images[position], selectedPos == position, editView, selectedPos)
+        holder.bind(images[position], selectedPos == position)
     }
 }

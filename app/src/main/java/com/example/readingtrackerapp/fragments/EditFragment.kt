@@ -24,7 +24,7 @@ import kotlin.concurrent.thread
 class EditFragment(private val id: Long = -1) : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
-    private lateinit var adapter: BookImagesAdapter
+    private lateinit var imagesAdapter: BookImagesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +38,14 @@ class EditFragment(private val id: Long = -1) : Fragment() {
     @SuppressLint("DiscouragedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = BookImagesAdapter(false)
+        imagesAdapter = BookImagesAdapter(false)
 
         val spinner = binding.status
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(R.array.available_status))
+            resources.getStringArray(R.array.available_status)
+        )
         spinner.adapter = spinnerAdapter
 
         if (id.toInt() != -1) {
@@ -57,19 +58,22 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 binding.currentPage.setText(data.currentPage.toString())
                 binding.maxPages.setText(data.maxPage.toString())
 
-                val image = requireContext().resources.getIdentifier(data.icon, "drawable", requireContext().packageName)
+                val image = requireContext().resources.getIdentifier(
+                    data.icon,
+                    "drawable",
+                    requireContext().packageName
+                )
+                imagesAdapter = BookImagesAdapter(true, image)
                 binding.images.apply {
-                    adapter = BookImagesAdapter(true, image)
+                    adapter = this@EditFragment.imagesAdapter
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
-
-        }
-
-
-        binding.images.apply {
-            adapter = this@EditFragment.adapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        } else {
+            binding.images.apply {
+                adapter = this@EditFragment.imagesAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
         }
 
         binding.saveBtn.setOnClickListener {
@@ -96,9 +100,10 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 val newBook = BookEntity(
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString()
+                        .toInt(),
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
-                    icon = resources.getResourceName(adapter.selectedResId)
+                    icon = resources.getResourceName(imagesAdapter.selectedResId)
                 )
                 thread {
                     BookDB.open(requireContext()).books.addBook(newBook)
@@ -109,9 +114,10 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     id = id,
                     title = title.text.toString(),
                     status = binding.status.selectedItem.toString(),
-                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString().toInt(),
+                    currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString()
+                        .toInt(),
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
-                    icon = resources.getResourceName(adapter.selectedResId)
+                    icon = resources.getResourceName(imagesAdapter.selectedResId)
                 )
                 thread {
                     BookDB.open(requireContext()).books.updateBook(book)
@@ -121,5 +127,4 @@ class EditFragment(private val id: Long = -1) : Fragment() {
             Toast.makeText(this.context, this.getString(R.string.saved), Toast.LENGTH_SHORT).show()
         }
     }
-
 }
