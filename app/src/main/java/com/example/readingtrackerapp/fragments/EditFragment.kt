@@ -84,7 +84,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
 
             val currentPageValueExists = binding.currentPage.text.isNotEmpty()
             val maxPageValueExists = binding.maxPages.text.isNotEmpty()
-            if (currentPageValueExists || maxPageValueExists) {
+            if (currentPageValueExists && maxPageValueExists) {
                 if (currentPage.text.toString().toInt() > maxPage.text.toString().toInt()) {
                     currentPage.error = resources.getString(R.string.page_error)
                     maxPage.error = resources.getString(R.string.page_error)
