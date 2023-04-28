@@ -107,7 +107,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 )
                 thread {
                     BookDB.open(requireContext()).books.addBook(newBook)
-                    (activity as? Navigable)?.navigate(Navigable.Destination.List)
+                    parentFragmentManager.popBackStack()
                 }
             } else { // editing
                 val book = BookEntity(
@@ -121,7 +121,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 )
                 thread {
                     BookDB.open(requireContext()).books.updateBook(book)
-                    (activity as? Navigable)?.navigate(Navigable.Destination.List)
+                    parentFragmentManager.popBackStack()
                 }
             }
             Toast.makeText(this.context, this.getString(R.string.saved), Toast.LENGTH_SHORT).show()
