@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), Navigable {
             .commit()
     }
 
-    override fun navigate(to: Navigable.Destination) {
+    override fun navigate(to: Navigable.Destination, id: Long) {
         supportFragmentManager.beginTransaction().apply {
             when (to) {
                 Navigable.Destination.List -> replace(
@@ -26,19 +26,16 @@ class MainActivity : AppCompatActivity(), Navigable {
                     ListFragment(),
                     ListFragment::class.java.name
                 )
-                Navigable.Destination.Edit -> {
+                Navigable.Destination.Add -> {
                     replace(R.id.container, EditFragment(), EditFragment::class.java.name)
+                    addToBackStack(EditFragment::class.java.name)
+                }
+                Navigable.Destination.Edit -> {
+                    replace(R.id.container, EditFragment(id), EditFragment::class.java.name)
                     addToBackStack(EditFragment::class.java.name)
                 }
             }.commit()
         }
-    }
-
-    override fun navigateWithBookId(to: Navigable.Destination, id: Long) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.container, EditFragment(id), EditFragment::class.java.name)
-            addToBackStack(EditFragment::class.java.name)
-        }.commit()
     }
 }
 

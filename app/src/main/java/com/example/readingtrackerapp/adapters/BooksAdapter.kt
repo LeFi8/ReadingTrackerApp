@@ -97,7 +97,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         }
 
         binding.root.setOnClickListener {
-            (binding.root.context as? Navigable)?.navigateWithBookId(Navigable.Destination.Edit, binding.id.text.toString().toLong())
+            (binding.root.context as? Navigable)?.navigate(Navigable.Destination.Edit, binding.id.text.toString().toLong())
         }
     }
 
