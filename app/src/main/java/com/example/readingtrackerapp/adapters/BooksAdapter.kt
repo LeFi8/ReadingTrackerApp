@@ -53,7 +53,6 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    @SuppressLint("DiscouragedApi")
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.bind(data[position])
         val binding = holder.getBinding()
@@ -79,7 +78,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
                             it.status,
                             it.currentPage,
                             it.maxPage,
-                            context.resources.getIdentifier(it.icon, "drawable", context.packageName)
+                            it.icon
                         )
                     }
                     replace(books)
@@ -106,7 +105,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         this.listener = listener
     }
 
-    @SuppressLint("NotifyDataSetChanged", "DiscouragedApi")
+    @SuppressLint("NotifyDataSetChanged")
     fun replace(newData: List<Book>){
         data.clear()
         data.addAll(newData.reversed()) //order from last added
@@ -116,7 +115,6 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun sort() {
         val notSorted = data.toList()
         data.sortBy {

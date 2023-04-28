@@ -11,5 +11,5 @@ data class BookEntity(
     val status: String,
     val currentPage: Int,
     val maxPage: Int,
-    val icon: String
+    val icon: Int
 )

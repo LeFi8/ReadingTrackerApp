@@ -36,10 +36,8 @@ class MainActivity : AppCompatActivity(), Navigable {
 
     override fun navigateWithBookId(to: Navigable.Destination, id: Long) {
         supportFragmentManager.beginTransaction().apply {
-
             replace(R.id.container, EditFragment(id), EditFragment::class.java.name)
             addToBackStack(EditFragment::class.java.name)
-
         }.commit()
     }
 }

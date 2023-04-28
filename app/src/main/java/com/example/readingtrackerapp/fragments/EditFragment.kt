@@ -1,6 +1,5 @@
 package com.example.readingtrackerapp.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,7 +34,6 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         }.root
     }
 
-    @SuppressLint("DiscouragedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imagesAdapter = BookImagesAdapter(false)
@@ -48,7 +46,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
         )
         spinner.adapter = spinnerAdapter
 
-        if (id.toInt() != -1) {
+        if (id.toInt() != -1) { // editing
             CoroutineScope(Dispatchers.Main).launch {
                 val data = withContext(Dispatchers.IO) {
                     BookDB.open(view.context).books.getBook(id)
@@ -58,18 +56,13 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                 binding.currentPage.setText(data.currentPage.toString())
                 binding.maxPages.setText(data.maxPage.toString())
 
-                val image = requireContext().resources.getIdentifier(
-                    data.icon,
-                    "drawable",
-                    requireContext().packageName
-                )
-                imagesAdapter = BookImagesAdapter(true, image)
+                imagesAdapter = BookImagesAdapter(true, data.icon)
                 binding.images.apply {
                     adapter = this@EditFragment.imagesAdapter
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
-        } else {
+        } else { // adding
             binding.images.apply {
                 adapter = this@EditFragment.imagesAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -103,7 +96,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString()
                         .toInt(),
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
-                    icon = resources.getResourceName(imagesAdapter.selectedResId)
+                    icon = imagesAdapter.selectedResId
                 )
                 thread {
                     BookDB.open(requireContext()).books.addBook(newBook)
@@ -117,7 +110,7 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     currentPage = if (currentPage.text.isEmpty()) 0 else currentPage.text.toString()
                         .toInt(),
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
-                    icon = resources.getResourceName(imagesAdapter.selectedResId)
+                    icon = imagesAdapter.selectedResId
                 )
                 thread {
                     BookDB.open(requireContext()).books.updateBook(book)

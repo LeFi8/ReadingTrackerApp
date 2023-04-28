@@ -1,6 +1,5 @@
 package com.example.readingtrackerapp.fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -65,7 +64,6 @@ class ListFragment : Fragment(), SummaryRefreshListener{
         }
     }
 
-    @SuppressLint("DiscouragedApi")
     private fun loadData() = thread {
         val books = BookDB.open(requireContext()).books.getAll().map {
         Book(
@@ -74,7 +72,7 @@ class ListFragment : Fragment(), SummaryRefreshListener{
             it.status,
             it.currentPage,
             it.maxPage,
-            resources.getIdentifier(it.icon, "drawable", requireContext().packageName)
+            it.icon
         )
     }
         adapter?.replace(books)
