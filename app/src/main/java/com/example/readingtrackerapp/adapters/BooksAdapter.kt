@@ -64,12 +64,12 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
             alertDialog.setTitle(
                 binding.root.resources.getString(
                     R.string.removing_are_you_sure,
-                    data[position].title
+                    binding.bookTitle.text.toString()
                 )
             )
             alertDialog.setPositiveButton(binding.root.resources.getString(R.string.yes)) { _, _ ->
                 thread {
-                    val selectedBook = BookDB.open(context).books.getBook(data[position].id)
+                    val selectedBook = BookDB.open(context).books.getBook(binding.id.text.toString().toLong())
                     BookDB.open(context).books.removeBook(selectedBook)
 
                     val books = BookDB.open(context).books.getAll().map {
@@ -98,7 +98,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         }
 
         binding.root.setOnClickListener {
-            (binding.root.context as? Navigable)?.navigateWithBookId(Navigable.Destination.Edit, data[position].id)
+            (binding.root.context as? Navigable)?.navigateWithBookId(Navigable.Destination.Edit, binding.id.text.toString().toLong())
         }
     }
 
@@ -108,14 +108,11 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged", "DiscouragedApi")
     fun replace(newData: List<Book>){
-        val callback = BookCallback(data, newData)
         data.clear()
-        data.addAll(newData)
-        val result = DiffUtil.calculateDiff(callback)
+        data.addAll(newData.reversed()) //order from last added
 
         handler.post {
             notifyDataSetChanged()
-            result.dispatchUpdatesTo(this)
         }
     }
 
@@ -130,7 +127,6 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         val result = DiffUtil.calculateDiff(callback)
 
         handler.post {
-            notifyDataSetChanged()
             result.dispatchUpdatesTo(this)
         }
     }
