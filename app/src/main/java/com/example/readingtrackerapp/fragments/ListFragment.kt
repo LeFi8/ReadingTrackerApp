@@ -34,7 +34,6 @@ class ListFragment : Fragment(), SummaryRefreshListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        adapter = BooksAdapter()
         return FragmentListBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -42,6 +41,7 @@ class ListFragment : Fragment(), SummaryRefreshListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = BooksAdapter()
         loadData()
 
         overallProgressText = view.findViewById(R.id.overallProgress)
@@ -61,6 +61,7 @@ class ListFragment : Fragment(), SummaryRefreshListener{
 
         binding.sortBtn.setOnClickListener {
             adapter?.sort()
+            binding.list.smoothScrollToPosition(0)
         }
     }
 
