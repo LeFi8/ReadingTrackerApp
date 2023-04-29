@@ -5,9 +5,9 @@ import androidx.annotation.DrawableRes
 data class Book (
     val id: Long,
     val title: String,
-    val status: String,
+    var status: String,
     var currentPage: Int,
-    val maxPages: Int,
+    var maxPages: Int,
     @DrawableRes
     val resId: Int
 )

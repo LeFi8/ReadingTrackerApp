@@ -139,7 +139,12 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun currentPageIncrease(layoutPosition: Int, context: Context) {
-        if (data[layoutPosition].currentPage + 1 > data[layoutPosition].maxPages) {
+        val selectedBook = data[layoutPosition]
+        if (selectedBook.currentPage + 1 > selectedBook.maxPages &&
+            selectedBook.status != context.resources.getStringArray(
+                R.array.available_status
+            )[3]
+        ) {
             Toast.makeText(context, context.getString(R.string.book_finished), Toast.LENGTH_SHORT)
                 .show()
             handler.post {
@@ -151,15 +156,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val db = BookDB.open(context)
-                val selectedBook = db.books.getBook(data[layoutPosition].id)
-                val book = BookEntity(
-                    id = selectedBook.id,
-                    title = selectedBook.title,
-                    status = selectedBook.status,
-                    currentPage = ++data[layoutPosition].currentPage,
-                    maxPage = selectedBook.maxPage,
-                    icon = selectedBook.icon
-                )
+                val book = updateBook(selectedBook, context)
                 db.books.updateBook(book)
                 db.close()
                 handler.post {
@@ -168,5 +165,28 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
                 listener?.summaryDataRefresh(context)
             }
         }
+    }
+
+    private fun updateBook(oldBook: Book, context: Context): BookEntity {
+        if (oldBook.currentPage + 1 == oldBook.maxPages) {
+            oldBook.status = context.resources.getStringArray(R.array.available_status)[2] // completed
+            oldBook.currentPage++
+        } else if (oldBook.currentPage == 0){
+            oldBook.status = context.resources.getStringArray(R.array.available_status)[1] // reading
+            oldBook.currentPage++
+        } else if (oldBook.status == context.resources.getStringArray(R.array.available_status)[3] &&
+            oldBook.currentPage == oldBook.maxPages) { // up to date
+            oldBook.currentPage++
+            oldBook.maxPages++
+        } else oldBook.currentPage++
+
+        return BookEntity(
+            id = oldBook.id,
+            title = oldBook.title,
+            status = oldBook.status,
+            currentPage = oldBook.currentPage,
+            maxPage = oldBook.maxPages,
+            icon = oldBook.resId
+        )
     }
 }
