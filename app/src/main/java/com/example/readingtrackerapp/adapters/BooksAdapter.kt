@@ -140,11 +140,7 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
     fun currentPageIncrease(layoutPosition: Int, context: Context) {
         val selectedBook = data[layoutPosition]
-        if (selectedBook.currentPage + 1 > selectedBook.maxPages &&
-            selectedBook.status != context.resources.getStringArray(
-                R.array.available_status
-            )[3]
-        ) {
+        if (isOnLastPage(selectedBook, context.resources.getStringArray(R.array.available_status))) {
             Toast.makeText(context, context.getString(R.string.book_finished), Toast.LENGTH_SHORT)
                 .show()
             handler.post {
@@ -165,6 +161,13 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
                 listener?.summaryDataRefresh(context)
             }
         }
+    }
+
+    private fun isOnLastPage(selectedBook: Book, availableStatus: Array<String>): Boolean {
+        val isOnLastPage = selectedBook.currentPage + 1 > selectedBook.maxPages
+        val statusNotUpToDate = selectedBook.status != availableStatus[3]
+        val unknownLastPage = selectedBook.maxPages != 0
+        return isOnLastPage && statusNotUpToDate && unknownLastPage
     }
 
     private fun updateBook(oldBook: Book, context: Context): BookEntity {
