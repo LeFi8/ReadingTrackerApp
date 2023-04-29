@@ -24,6 +24,7 @@
     <string name="status_reading">Reading</string>
     <string name="status_completed">Completed</string>
     <string name="page_error">The current reading page cannot exceed the maximum number of pages</string>
+    <string name="book_finished">You have already reached the maximum page</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

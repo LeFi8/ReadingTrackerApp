@@ -2,6 +2,7 @@ package com.example.readingtrackerapp.adapters
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -15,9 +16,13 @@ import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.R
 import com.example.readingtrackerapp.SummaryRefreshListener
 import com.example.readingtrackerapp.data.BookDB
+import com.example.readingtrackerapp.data.model.BookEntity
 import com.example.readingtrackerapp.databinding.ListItemBinding
 import com.example.readingtrackerapp.model.Book
-import kotlin.concurrent.thread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BookViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -47,7 +52,6 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
             parent,
             false
         )
-
         return BookViewHolder(binding)
     }
 
@@ -67,8 +71,9 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
                 )
             )
             alertDialog.setPositiveButton(binding.root.resources.getString(R.string.yes)) { _, _ ->
-                thread {
-                    val selectedBook = BookDB.open(context).books.getBook(binding.id.text.toString().toLong())
+                CoroutineScope(Dispatchers.IO).launch {
+                    val selectedBook =
+                        BookDB.open(context).books.getBook(binding.id.text.toString().toLong())
                     BookDB.open(context).books.removeBook(selectedBook)
 
                     val books = BookDB.open(context).books.getAll().map {
@@ -97,16 +102,19 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         }
 
         binding.root.setOnClickListener {
-            (binding.root.context as? Navigable)?.navigate(Navigable.Destination.Edit, binding.id.text.toString().toLong())
+            (binding.root.context as? Navigable)?.navigate(
+                Navigable.Destination.Edit,
+                binding.id.text.toString().toLong()
+            )
         }
     }
 
-    fun setSummaryRefreshListener(listener: SummaryRefreshListener){
+    fun setSummaryRefreshListener(listener: SummaryRefreshListener) {
         this.listener = listener
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun replace(newData: List<Book>){
+    fun replace(newData: List<Book>) {
         data.clear()
         data.addAll(newData.reversed()) //order from last added
 
@@ -129,4 +137,36 @@ class BooksAdapter: RecyclerView.Adapter<BookViewHolder>() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun currentPageIncrease(layoutPosition: Int, context: Context) {
+        if (data[layoutPosition].currentPage + 1 > data[layoutPosition].maxPages) {
+            Toast.makeText(context, context.getString(R.string.book_finished), Toast.LENGTH_SHORT)
+                .show()
+            handler.post {
+                notifyDataSetChanged()
+            }
+            return
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val db = BookDB.open(context)
+                val selectedBook = db.books.getBook(data[layoutPosition].id)
+                val book = BookEntity(
+                    id = selectedBook.id,
+                    title = selectedBook.title,
+                    status = selectedBook.status,
+                    currentPage = ++data[layoutPosition].currentPage,
+                    maxPage = selectedBook.maxPage,
+                    icon = selectedBook.icon
+                )
+                db.books.updateBook(book)
+                db.close()
+                handler.post {
+                    notifyDataSetChanged()
+                }
+                listener?.summaryDataRefresh(context)
+            }
+        }
+    }
 }

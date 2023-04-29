@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.thread
 
 
 class EditFragment(private val id: Long = -1) : Fragment() {
@@ -98,9 +97,8 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
                     icon = imagesAdapter.selectedResId
                 )
-                thread {
+                CoroutineScope(Dispatchers.IO).launch {
                     BookDB.open(requireContext()).books.addBook(newBook)
-                    parentFragmentManager.popBackStack()
                 }
             } else { // editing
                 val book = BookEntity(
@@ -112,11 +110,11 @@ class EditFragment(private val id: Long = -1) : Fragment() {
                     maxPage = if (maxPage.text.isEmpty()) 0 else maxPage.text.toString().toInt(),
                     icon = imagesAdapter.selectedResId
                 )
-                thread {
+                CoroutineScope(Dispatchers.IO).launch {
                     BookDB.open(requireContext()).books.updateBook(book)
-                    parentFragmentManager.popBackStack()
                 }
             }
+            parentFragmentManager.popBackStack()
             Toast.makeText(this.context, this.getString(R.string.saved), Toast.LENGTH_SHORT).show()
         }
     }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.readingtrackerapp.Navigable
 import com.example.readingtrackerapp.adapters.BooksAdapter
@@ -19,10 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.readingtrackerapp.SummaryRefreshListener
+import com.example.readingtrackerapp.adapters.SwipeGesture
 import com.example.readingtrackerapp.model.Book
-import kotlin.concurrent.thread
 
-class ListFragment : Fragment(), SummaryRefreshListener{
+class ListFragment : Fragment(), SummaryRefreshListener {
 
     private lateinit var binding: FragmentListBinding
     private var adapter: BooksAdapter? = null
@@ -52,6 +53,11 @@ class ListFragment : Fragment(), SummaryRefreshListener{
         binding.list.let {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(requireContext())
+            ItemTouchHelper(
+                SwipeGesture { layoutPos ->
+                    adapter?.currentPageIncrease(layoutPos, requireContext())
+                }
+            ).attachToRecyclerView(it)
         }
 
         binding.addBtn.setOnClickListener {
@@ -64,50 +70,48 @@ class ListFragment : Fragment(), SummaryRefreshListener{
         }
     }
 
-    private fun loadData() = thread {
-        val books = BookDB.open(requireContext()).books.getAll().map {
-        Book(
-            it.id,
-            it.title,
-            it.status,
-            it.currentPage,
-            it.maxPage,
-            it.icon
-        )
-    }
-        adapter?.replace(books)
-    }
-
     override fun onStart() {
         super.onStart()
         loadData()
     }
 
-    private fun summaryRefresh(context: Context) {
-        CoroutineScope(Dispatchers.Main).launch {
-            var currentPagesSum = 0
-            var maxPagesSum = 0
-            val data = withContext(Dispatchers.IO) {
-                BookDB.open(context).books.getAll()
+    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+        val books = withContext(Dispatchers.IO) {
+            BookDB.open(requireContext()).books.getAll().map {
+                Book(
+                    it.id,
+                    it.title,
+                    it.status,
+                    it.currentPage,
+                    it.maxPage,
+                    it.icon
+                )
             }
-
-            data.forEach {
-                currentPagesSum += it.currentPage
-                maxPagesSum += it.maxPage
-            }
-
-            overallProgressText.text = context.resources.getString(
-                R.string.overall_progress_text, currentPagesSum, maxPagesSum
-            )
-
-            overallProgressBar.progress =
-                (currentPagesSum.toDouble() / maxPagesSum.toDouble() * 100).toInt()
         }
+        adapter?.replace(books)
     }
+
+    private fun summaryRefresh(context: Context) = CoroutineScope(Dispatchers.Main).launch {
+        var currentPagesSum = 0
+        var maxPagesSum = 0
+        val data = withContext(Dispatchers.IO) {
+            BookDB.open(context).books.getAll()
+        }
+
+        data.forEach {
+            currentPagesSum += it.currentPage
+            maxPagesSum += it.maxPage
+        }
+
+        overallProgressText.text = context.resources.getString(
+            R.string.overall_progress_text, currentPagesSum, maxPagesSum
+        )
+        overallProgressBar.progress =
+            (currentPagesSum.toDouble() / maxPagesSum.toDouble() * 100).toInt()
+    }
+
 
     override fun summaryDataRefresh(context: Context) {
         summaryRefresh(context)
     }
-
-
 }
