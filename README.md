@@ -10,6 +10,7 @@
 
 - View progress for each book/manga with a progress bar
 - View overall progress for all items with a progress bar at the top of home page
+- Sort all items based on current reading progress
 - Swipe to add one page to current read pages
 - Press and hold to remove an item from the list
 
