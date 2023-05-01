@@ -18,4 +18,4 @@
 
 ## Used technologies
 - Written in Kotlin
-- SQLite Database for storing local data 
+- Room and SQLite Database for storing local data 
