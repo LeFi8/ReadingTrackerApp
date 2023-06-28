@@ -17,5 +17,6 @@
 <p align="center"><img src="/sample-images/swipe&remove.png" width="720"></p>
 
 ## Used technologies
-- Written in Kotlin
-- Room and SQLite Database for storing local data 
+- Kotlin and Android Studio
+- Room and SQLite Database for storing local data
+- ViewBindings, Coroutines
